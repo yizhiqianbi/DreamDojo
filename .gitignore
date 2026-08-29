@@ -69,6 +69,8 @@ output*/
 
 # Frontend evaluation media is intentionally versioned.
 !viewer/public/videos/*.mp4
+# Compact inference artifacts are intentionally versioned for reproducibility.
+!inference_results/**/*.mp4
 
 # Launchers (internal)
 osmo_launch.py
