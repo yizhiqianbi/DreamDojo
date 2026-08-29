@@ -152,6 +152,32 @@ def construct_modality_config_and_transforms(num_frames, embodiment, agibot_pad_
                 ],
             ),
         }
+    elif embodiment == "jokeru":
+        # The source data is approximately 29 FPS. Sampling every fourth frame
+        # gives a useful ~7.25 FPS training cadence while retaining 13 frames.
+        timestep_interval = 4
+        delta_indices = list(range(0, num_frames * timestep_interval, timestep_interval))
+        video_key = "video.left_eye"
+        config = {
+            "video": ModalityConfig(
+                delta_indices=delta_indices,
+                modality_keys=[video_key],
+            ),
+            "state": ModalityConfig(
+                delta_indices=[0],
+                modality_keys=["state.full"],
+            ),
+            "action": ModalityConfig(
+                delta_indices=delta_indices,
+                modality_keys=["action.full"],
+            ),
+            "language": ModalityConfig(
+                delta_indices=[0],
+                modality_keys=["annotation.task"],
+            ),
+        }
+    else:
+        raise ValueError(f"Unsupported embodiment: {embodiment}")
     
     video_modality, state_modality, action_modality = config["video"], config["state"], config["action"]
     height = 480

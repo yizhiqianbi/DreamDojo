@@ -1,0 +1,74 @@
+job:
+  project: dreamdojo
+  group: jokeru_posttrain
+  name: jokeru_2b_all_datasets
+
+checkpoint:
+  load_path: checkpoints/DreamDojo/2B_pretrain/iter_000140000
+  load_training_state: false
+  strict_resume: false
+  save_iter: 1000
+
+trainer:
+  # 332,294 train windows. Accounting for the earlier batch-1 and global
+  # batch-32 stages, iteration 8,953 is approximately three effective epochs
+  # after switching to global batch 128.
+  max_iter: 8953
+  grad_accum_iter: 1
+  callbacks:
+    every_n_sample_reg:
+      every_n: 1000
+      fps: 7
+      run_at_start: false
+    every_n_sample_ema:
+      every_n: 1000
+      fps: 7
+      run_at_start: false
+
+model_parallel:
+  context_parallel_size: 1
+
+model:
+  config:
+    state_t: 4
+    use_lam: false
+    tokenizer:
+      vae_pth: checkpoints/Wan2.1/Wan2.1_VAE.pth
+    net:
+      action_dim: 384
+      temporal_compression_ratio: 4
+      num_action_per_chunk: 12
+      zero_init_action_embedder: false
+
+dataloader_train:
+  batch_size: 4
+  dataset:
+    num_frames: 13
+    dataset_path:
+      - datasets/jokeru/arrange_orange_juice_and_green_tea_patch
+      - datasets/jokeru/arrange_orange_juice_and_green_tea_patch_annotated
+      - datasets/jokeru/grip_bottle_cap
+      - datasets/jokeru/arrange_orange_juice_and_green_tea_2
+      - datasets/jokeru/arrange_orange_juice_and_green_tea_2_annotated
+      - datasets/jokeru/arrange_orange_juice_and_green_tea_3_annotated
+      - datasets/jokeru/continuous_shelf_organizing
+      - datasets/jokeru/arrange_orange_juice_and_green_tea
+      - datasets/jokeru/arrange_orange_juice_and_green_tea_annotated
+      - datasets/jokeru/arrange_orange_juice_and_green_tea_3
+      - datasets/jokeru/pick_up_black_bottle
+      - datasets/jokeru/take_wrong_item_right_arm
+      - datasets/jokeru/pick_right_purple_box_and_place_it_in_the_middle
+    data_split: train
+    single_base_index: false
+    deterministic_uniform_sampling: false
+
+dataloader_val:
+  batch_size: 1
+  dataset:
+    num_frames: 13
+    dataset_path:
+      - datasets/jokeru/grip_bottle_cap
+      - datasets/jokeru/pick_up_black_bottle
+    data_split: test
+    single_base_index: false
+    deterministic_uniform_sampling: false

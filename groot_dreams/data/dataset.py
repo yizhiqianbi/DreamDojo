@@ -30,6 +30,18 @@ LE_ROBOT_STATS_FILENAME = "meta/stats.json"
 LE_ROBOT_DATA_FILENAME = "data/*/*.parquet"
 
 
+def get_jokeru_modality_meta_path(dataset_path: Path) -> Path:
+    """Select the jokeru schema from the action dimension declared by LeRobot."""
+    info_path = dataset_path / LE_ROBOT_INFO_FILENAME
+    with open(info_path, "r") as f:
+        action_shape = json.load(f)["features"]["action"]["shape"]
+    if action_shape == [30]:
+        return Path("shared_meta/Jokeru_modality.json")
+    if action_shape == [15]:
+        return Path("shared_meta/Jokeru_right_arm_modality.json")
+    raise ValueError(f"Unsupported jokeru action shape {action_shape} in {info_path}")
+
+
 def calculate_dataset_statistics(parquet_paths: list[Path]) -> dict:
     """Calculate the dataset statistics of all columns for a list of parquet files."""
     # Dataset statistics
@@ -262,6 +274,9 @@ class LeRobotSingleDataset(Dataset):
             elif embodiment_tag == EmbodimentTag.YAM:
                 modality_meta_path = Path("shared_meta/YAM_modality.json")
                 print("WARNING: Could not find modality.json in dataset path, falling back to shared_meta/YAM_modality.json")
+            elif embodiment_tag == EmbodimentTag.JOKERU:
+                modality_meta_path = get_jokeru_modality_meta_path(self.dataset_path)
+                print(f"WARNING: Could not find modality.json in dataset path, falling back to {modality_meta_path}")
             else:
                 raise ValueError(f"Embodiment tag {embodiment_tag} not supported")
         assert (
@@ -342,6 +357,10 @@ class LeRobotSingleDataset(Dataset):
         elif embodiment_tag == EmbodimentTag.YAM:
             default_stats_path = Path("shared_meta/YAM_stats.json")
             default_modality_meta_path = Path("shared_meta/YAM_modality.json")
+        elif embodiment_tag == EmbodimentTag.JOKERU:
+            # Each jokeru repository ships statistics computed from that
+            # repository.  There is no cross-dataset canonical statistics file.
+            has_default_meta = False
         else:
             raise ValueError(f"Embodiment tag {embodiment_tag} not supported")
         if has_default_meta:
@@ -368,7 +387,10 @@ class LeRobotSingleDataset(Dataset):
                 state_action_meta = le_modality_meta.get_key_meta(f"{our_modality}.{subkey}")
                 assert isinstance(state_action_meta, LeRobotStateActionMetadata)
                 le_modality = state_action_meta.original_key
-                for stat_name in le_statistics[le_modality]:
+                # LeRobot v2.1 also records count/q10/q50/q90.  The training
+                # metadata schema only consumes these six statistics, and
+                # count in particular is scalar rather than action-shaped.
+                for stat_name in DatasetStatisticalValues.model_fields:
                     if has_default_meta:
                         try:
                             default_state_action_meta = default_modality_meta.get_key_meta(f"{our_modality}.{subkey}")
@@ -479,6 +501,9 @@ class LeRobotSingleDataset(Dataset):
             elif self.tag == "yam":
                 modality_meta_path = Path("shared_meta/YAM_modality.json")
                 print("WARNING: Could not find modality.json in dataset path, falling back to shared_meta/YAM_modality.json")
+            elif self.tag == "jokeru":
+                modality_meta_path = get_jokeru_modality_meta_path(self.dataset_path)
+                print(f"WARNING: Could not find modality.json in dataset path, falling back to {modality_meta_path}")
             else:
                 raise ValueError(f"Embodiment tag {self.tag} not supported")
         assert (
@@ -1067,12 +1092,29 @@ class WrappedLeRobotSingleDataset(LeRobotSingleDataset):
                 action_seq[:, 101:147] = delta_actions
             elif "agibot" in str(self.dataset_path).lower():
                 action_seq[:, 147:169] = delta_actions
+            elif self.tag == "jokeru":
+                # DreamDojo reserves [169, 220) for additional embodiments.
+                # Keep jokeru's two source control schemas in disjoint ranges.
+                if delta_actions.shape[-1] == 30:
+                    action_seq[:, 169:199] = delta_actions
+                elif delta_actions.shape[-1] == 15:
+                    action_seq[:, 199:214] = delta_actions
+                else:
+                    raise ValueError(f"Unsupported jokeru action dimension {delta_actions.shape[-1]}")
             
             text = ""
             if "annotation.human.coarse_action" in original_outputs:
                 text = original_outputs["annotation.human.coarse_action"][0].split(":")[-1].strip()
+            elif "annotation.task" in original_outputs:
+                text = original_outputs["annotation.task"][0]
+            if self.tag == "jokeru" and (
+                not text.strip() or text.strip().lower() in {"task", "unknown", "none"}
+            ):
+                text = self.dataset_name.replace("_annotated", "").replace("_", " ")
 
-            key = action_seq[0:1, :29]
+            # `key` is bookkeeping metadata.  Clone the slice so writing the
+            # state below does not mutate the first row of the action tensor.
+            key = action_seq[0:1, :29].clone()
             key[:, :min(original_outputs["state"].shape[1], 29)] = original_outputs["state"][:, :29]
 
             data = {
@@ -1090,7 +1132,7 @@ class WrappedLeRobotSingleDataset(LeRobotSingleDataset):
             # Ensure caption key exists for online text encoding
             # Many models expect `ai_caption` when text_encoder_config.compute_online=True.
             # Default to an empty string to avoid KeyError; training configs can override upstream.
-            data.setdefault("ai_caption", "")  # Return a single string, not a list
+            data.setdefault("ai_caption", text)  # Return a single string, not a list
             return data
         except Exception as e:
             print(f"Error occurred while getting item {index} in {self.dataset_name}: {e}")

@@ -46,6 +46,9 @@ credentials/
 *.bin
 *.h5
 *.onnx
+/checkpoints/DreamDojo/
+/datasets/jokeru/
+/.cache/
 
 # Media
 *.mp4
@@ -62,6 +65,10 @@ logs/
 # Debug / Output
 debug/
 output*/
+/results/
+
+# Frontend evaluation media is intentionally versioned.
+!viewer/public/videos/*.mp4
 
 # Launchers (internal)
 osmo_launch.py

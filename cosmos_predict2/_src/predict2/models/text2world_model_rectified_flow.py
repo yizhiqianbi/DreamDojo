@@ -89,6 +89,7 @@ class Text2WorldModelRectifiedFlowConfig:
     input_image_key: str = "images"  # key to fetch input image from data_batch
     input_caption_key: str = "ai_caption"  # Key used to fetch input captions
     use_torch_compile: bool = False
+    use_lam: bool = True
 
     state_ch: int = 16  # for latent model, ref to the latent channel number
     state_t: int = 8  # for latent model, ref to the latent number of frames
@@ -176,16 +177,18 @@ class Text2WorldModelRectifiedFlow(ImaginaireModel):
         if self.config.text_encoder_config is not None and self.config.text_encoder_config.compute_online:
             self.text_encoder = TextEncoder(self.config.text_encoder_config)
 
-        self.lam = LAM(
-            image_channels=3,
-            lam_model_dim=1024,
-            lam_latent_dim=32,
-            lam_patch_size=16,
-            lam_enc_blocks=24,
-            lam_dec_blocks=24,
-            lam_num_heads=16,
-            ckpt_path="checkpoints/DreamDojo/LAM_400k.ckpt",
-        )
+        self.lam = None
+        if self.config.use_lam:
+            self.lam = LAM(
+                image_channels=3,
+                lam_model_dim=1024,
+                lam_latent_dim=32,
+                lam_patch_size=16,
+                lam_enc_blocks=24,
+                lam_dec_blocks=24,
+                lam_num_heads=16,
+                ckpt_path="checkpoints/DreamDojo/LAM_400k.ckpt",
+            )
 
         # 7. training states
         if parallel_state.is_initialized():
@@ -860,13 +863,16 @@ class Text2WorldModelRectifiedFlow(ImaginaireModel):
             data_batch["t5_text_embeddings"] = text_embeddings
             data_batch["t5_text_mask"] = torch.ones(text_embeddings.shape[0], text_embeddings.shape[1], device="cuda")
 
-        lam_video = rearrange(data_batch["lam_video"], "b (p t) h w c -> (b p) t h w c", t=2)
-        lam_input = {"videos": lam_video}
-        with torch.no_grad():
-            outputs = self.lam.lam(lam_input)
-        latent_action = outputs["z_rep"].squeeze().to(data_batch["action"].dtype).detach()
-        latent_action = rearrange(latent_action, "(t b) d -> b t d", t=data_batch["action"].shape[1])
-        data_batch["action"][:, :, -32:] = data_batch["action"][:, :, -32:] * latent_action
+        if self.lam is not None:
+            lam_video = rearrange(data_batch["lam_video"], "b (p t) h w c -> (b p) t h w c", t=2)
+            lam_input = {"videos": lam_video}
+            with torch.no_grad():
+                outputs = self.lam.lam(lam_input)
+            latent_action = outputs["z_rep"].squeeze().to(data_batch["action"].dtype).detach()
+            latent_action = rearrange(latent_action, "(t b) d -> b t d", t=data_batch["action"].shape[1])
+            data_batch["action"][:, :, -32:] = data_batch["action"][:, :, -32:] * latent_action
+        else:
+            data_batch["action"][:, :, -32:] = 0
 
         # Get the input data to noise and denoise~(image, video) and the corresponding conditioner.
         _, x0_B_C_T_H_W, condition = self.get_data_and_condition(data_batch)

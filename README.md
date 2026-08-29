@@ -32,6 +32,7 @@
 - [Latent Action Model Training](https://github.com/NVIDIA/DreamDojo/blob/main/docs/LAM.md)
 - [DreamDojo Pretraining](https://github.com/NVIDIA/DreamDojo/blob/main/docs/PRETRAIN.md)
 - [DreamDojo Post-Training](https://github.com/NVIDIA/DreamDojo/blob/main/docs/POSTTRAIN.md)
+- [jokeru 2B Post-Training](docs/JOKERU_POSTTRAIN.md)
 - [DreamDojo Distillation](https://github.com/NVIDIA/DreamDojo/blob/main/docs/DISTILL.md)
 - [Evaluation](https://github.com/NVIDIA/DreamDojo/blob/main/docs/EVAL.md)
 - [Trouble Shooting](https://github.com/NVIDIA/DreamDojo/blob/main/docs/ISSUES.md)

@@ -18,7 +18,6 @@ from hydra.core.config_store import ConfigStore
 from omegaconf import OmegaConf
 
 from cosmos_predict2._src.imaginaire.lazy_config import LazyDict, LazyConfig
-from cosmos_predict2._src.imaginaire.utils.checkpoint_db import get_checkpoint_path
 from cosmos_predict2.config import MODEL_CHECKPOINTS, ModelKey
 
 # Use the post-trained checkpoint which has the correct experiment reference
@@ -92,7 +91,11 @@ _default_groot_config = LazyDict(
         checkpoint=dict(
             save_iter=10_000,
             # pyrefly: ignore  # missing-attribute
-            load_path=get_checkpoint_path(DEFAULT_CHECKPOINT.s3.uri),
+            # Post-training starts from the released DreamDojo pretraining
+            # checkpoint.  Keeping this local also avoids eagerly downloading
+            # the gated Cosmos base checkpoint while experiment YAML files are
+            # being registered.
+            load_path="checkpoints/DreamDojo/2B_pretrain/iter_000140000",
             # load_path="/mnt/amlfs-01/shared/shenyuang/cosmos_logs/exp1201/pretrain/checkpoints/iter_000100000/",
             load_training_state=False,
             strict_resume=False,
@@ -203,7 +206,7 @@ _default_groot_config_14b = LazyDict(
         checkpoint=dict(
             save_iter=5_000,
             # pyrefly: ignore  # missing-attribute
-            load_path=get_checkpoint_path(DEFAULT_CHECKPOINT_14B.s3.uri),
+            load_path="checkpoints/DreamDojo/14B_pretrain/iter_000140000",
             # load_path="/mnt/amlfs-01/shared/shenyuang/cosmos_logs/exp1201/pretrain/checkpoints/iter_000100000/",
             load_training_state=False,
             strict_resume=False,

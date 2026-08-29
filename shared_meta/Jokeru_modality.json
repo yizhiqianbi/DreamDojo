@@ -1,0 +1,39 @@
+{
+    "state": {
+        "full": {
+            "original_key": "observation.state",
+            "start": 0,
+            "end": 30,
+            "absolute": true,
+            "dtype": "float32"
+        }
+    },
+    "action": {
+        "full": {
+            "original_key": "action",
+            "start": 0,
+            "end": 30,
+            "absolute": true,
+            "dtype": "float32"
+        }
+    },
+    "video": {
+        "left_eye": {
+            "original_key": "observation.images.left_eye"
+        },
+        "right_eye": {
+            "original_key": "observation.images.right_eye"
+        },
+        "left_wrist": {
+            "original_key": "observation.images.left_wrist"
+        },
+        "right_wrist": {
+            "original_key": "observation.images.right_wrist"
+        }
+    },
+    "annotation": {
+        "task": {
+            "original_key": "task_index"
+        }
+    }
+}
