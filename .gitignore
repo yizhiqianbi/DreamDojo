@@ -48,6 +48,7 @@ credentials/
 *.onnx
 /checkpoints/DreamDojo/
 /datasets/jokeru/
+/datasets/pi05_lerobot/
 /.cache/
 
 # Media
@@ -69,6 +70,7 @@ output*/
 
 # Frontend evaluation media is intentionally versioned.
 !viewer/public/videos/*.mp4
+!viewer/public/videos/parallel/*.mp4
 # Compact inference artifacts are intentionally versioned for reproducibility.
 !inference_results/**/*.mp4
 

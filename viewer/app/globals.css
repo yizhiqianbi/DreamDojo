@@ -133,6 +133,117 @@
   .metric-cell {
     @apply border-b border-border/70 p-4 md:border-b-0 md:border-r;
   }
+
+  .pipeline-step {
+    @apply relative flex min-h-[76px] items-center gap-3 border-b border-r border-border/60 px-4 py-3 last:border-r-0 lg:border-b-0;
+  }
+
+  .pipeline-index {
+    @apply absolute right-2 top-2 font-mono text-[9px] text-muted-foreground/55;
+  }
+
+  .source-card {
+    @apply overflow-hidden rounded-2xl border border-border/80 bg-secondary/22;
+  }
+
+  .branch-engine {
+    @apply relative hidden min-h-[520px] xl:flex xl:flex-col xl:items-center xl:justify-center;
+  }
+
+  .policy-node {
+    @apply relative z-10 flex w-[150px] items-center gap-2 rounded-xl border border-primary/30 bg-background/95 p-3 shadow-[0_0_42px_color-mix(in_oklch,var(--primary)_13%,transparent)];
+  }
+
+  .policy-pulse {
+    @apply absolute -inset-1 -z-10 rounded-[0.95rem] border border-primary/15;
+    animation: policy-pulse 2.8s ease-in-out infinite;
+  }
+
+  .branch-lines {
+    @apply absolute bottom-6 right-0 top-6 w-[115px] overflow-visible;
+  }
+
+  .universe-card {
+    @apply overflow-hidden rounded-2xl border border-border/75 bg-secondary/18 transition-[border-color,opacity,transform,box-shadow] duration-200;
+    opacity: 0.72;
+  }
+
+  .universe-card.is-active {
+    border-color: color-mix(in srgb, var(--branch-color) 58%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--branch-color) 16%, transparent), 0 18px 60px rgb(0 0 0 / 20%);
+    opacity: 1;
+    transform: translateX(3px);
+  }
+
+  .branch-dot {
+    @apply size-2.5 shrink-0 rounded-full;
+    background: var(--branch-color);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--branch-color) 75%, transparent);
+  }
+
+  .action-trace {
+    @apply my-5 flex h-12 items-end gap-1 rounded-lg border border-border/60 bg-background/50 px-2 py-1.5;
+  }
+
+  .action-trace span {
+    @apply min-h-1 flex-1 rounded-sm opacity-80;
+  }
+
+  .mini-readout {
+    @apply flex min-w-0 flex-col rounded-lg border border-border/55 bg-background/45 px-2.5 py-2;
+  }
+
+  .mini-readout span {
+    @apply truncate text-[9px] uppercase tracking-[0.12em] text-muted-foreground;
+  }
+
+  .mini-readout strong {
+    @apply mt-1 truncate font-mono text-[11px] font-semibold text-foreground;
+  }
+
+  .diagnostic {
+    @apply flex min-h-24 flex-col rounded-xl border border-border/65 bg-secondary/22 p-3;
+  }
+
+  .diagnostic span {
+    @apply text-[9px] uppercase tracking-[0.14em] text-muted-foreground;
+  }
+
+  .diagnostic strong {
+    @apply mt-3 font-mono text-lg font-semibold;
+  }
+
+  .diagnostic small {
+    @apply mt-auto pt-2 text-[9px] text-muted-foreground;
+  }
+}
+
+.parallel-map {
+  display: grid;
+  grid-template-columns: minmax(270px, 0.78fr) minmax(0, 1.55fr);
+  gap: 0.9rem;
+}
+
+.video-label {
+  @apply pointer-events-none absolute bottom-2 left-2 flex items-center gap-1.5 rounded-md border border-white/10 bg-black/65 px-2 py-1 font-mono text-[8px] uppercase tracking-[0.13em] text-white/75 backdrop-blur-md;
+}
+
+@media (min-width: 1280px) {
+  .parallel-map {
+    grid-template-columns: minmax(270px, 0.74fr) 118px minmax(600px, 1.55fr);
+    align-items: center;
+  }
+}
+
+@media (max-width: 767px) {
+  .parallel-map {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@keyframes policy-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.055); }
 }
 
 .lab-grid {

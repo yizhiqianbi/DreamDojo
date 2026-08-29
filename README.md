@@ -34,6 +34,8 @@
 - [DreamDojo Post-Training](https://github.com/NVIDIA/DreamDojo/blob/main/docs/POSTTRAIN.md)
 - [jokeru 2B Post-Training](docs/JOKERU_POSTTRAIN.md)
 - [Our Jokeru Inference Results](inference_results/README.md)
+- [π0.5 Fine-Tuning and Parallel-World Rollouts](docs/PI05_PARALLEL_WORLDS.md)
+- [Interactive π0.5 × DreamDojo Viewer](https://dreamdojo-jokeru-lab.boingshaw.chatgpt.site)
 - [DreamDojo Distillation](https://github.com/NVIDIA/DreamDojo/blob/main/docs/DISTILL.md)
 - [Evaluation](https://github.com/NVIDIA/DreamDojo/blob/main/docs/EVAL.md)
 - [Trouble Shooting](https://github.com/NVIDIA/DreamDojo/blob/main/docs/ISSUES.md)

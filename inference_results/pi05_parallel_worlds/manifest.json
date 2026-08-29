@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "observation_mode": "recorded-video-replay",
+  "action_mode": "pi05-flow-matching",
+  "pi05_config": "pi05_jokeru_base_inference",
+  "pi05_checkpoint": "gs://openpi-assets/checkpoints/pi05_base",
+  "dataset": "arrange_orange_juice_and_green_tea",
+  "episode": 0,
+  "merged_episode": 0,
+  "step": 100,
+  "source_frame": 400,
+  "prompt": "arrange the orange juice and green tea neatly",
+  "observation_image": "observation.png",
+  "observation_video": "observation_replay.mp4",
+  "universes": [
+    {
+      "id": 0,
+      "seed": 20260830,
+      "pi05_actions": "universe_00_pi05_actions.npy",
+      "dreamdojo_actions": "universe_00_dreamdojo_actions.npy",
+      "action_rms_from_universe_0": 0.0,
+      "pi05_infer_ms": 14142.73658581078,
+      "video": "universe_00.mp4"
+    },
+    {
+      "id": 1,
+      "seed": 20260831,
+      "pi05_actions": "universe_01_pi05_actions.npy",
+      "dreamdojo_actions": "universe_01_dreamdojo_actions.npy",
+      "action_rms_from_universe_0": 0.04142275944009041,
+      "pi05_infer_ms": 61.93237565457821,
+      "video": "universe_01.mp4"
+    },
+    {
+      "id": 2,
+      "seed": 20260832,
+      "pi05_actions": "universe_02_pi05_actions.npy",
+      "dreamdojo_actions": "universe_02_dreamdojo_actions.npy",
+      "action_rms_from_universe_0": 0.05525289518082098,
+      "pi05_infer_ms": 78.41937243938446,
+      "video": "universe_02.mp4"
+    }
+  ],
+  "pairwise_video_difference": {
+    "u0_u1": {
+      "pixel_psnr_db": 18.44427227973938,
+      "last_frame_mae": 0.04875927418470383
+    },
+    "u0_u2": {
+      "pixel_psnr_db": 18.30230712890625,
+      "last_frame_mae": 0.05213368684053421
+    },
+    "u1_u2": {
+      "pixel_psnr_db": 20.018038749694824,
+      "last_frame_mae": 0.03718530014157295
+    }
+  }
+}
