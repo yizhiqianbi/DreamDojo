@@ -58,13 +58,19 @@ The long-horizon run covers three task families and uses five chained native
 windows per sample (61 frames total). Its videos and metrics are written to
 [`iter_000003000/long_horizon_61f`](iter_000003000/long_horizon_61f) by
 [`scripts/run_jokeru_long_horizon.sh`](../scripts/run_jokeru_long_horizon.sh).
-The table below is updated after the run completes.
+Aggregate over the three rollouts: **PSNR 23.615**, **SSIM 0.903**, **LPIPS
+0.120**.
 
 | # | Dataset/task | Chunks | Frames | PSNR | SSIM | LPIPS | Comparison |
 |---:|---|---:|---:|---:|---:|---:|---|
-| 00 | continuous shelf organizing | 5 | 61 | pending | pending | pending | pending |
-| 01 | arrange orange juice and green tea 3 | 5 | 61 | pending | pending | pending | pending |
-| 02 | pick right purple box and place in middle | 5 | 61 | pending | pending | pending | pending |
+| 00 | continuous shelf organizing | 5 | 61 | 21.056 | 0.865 | 0.144 | [video](iter_000003000/long_horizon_61f/0000_merged.mp4) |
+| 01 | arrange orange juice and green tea 3 | 5 | 61 | 25.899 | 0.925 | 0.098 | [video](iter_000003000/long_horizon_61f/0001_merged.mp4) |
+| 02 | pick right purple box and place in middle | 5 | 61 | 23.891 | 0.919 | 0.120 | [video](iter_000003000/long_horizon_61f/0002_merged.mp4) |
+
+All three action arrays have 60 active (non-zero) steps. A first/middle/last
+frame inspection shows that the scene and robot geometry remain coherent
+across all five chunks. The continuous-shelf sample accumulates the largest
+appearance error, while the arrange sample remains closest to ground truth.
 
 ## Reproduce
 
