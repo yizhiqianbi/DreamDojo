@@ -165,7 +165,9 @@ def main():
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(0)
 
-    if "gr1" in args.experiment:
+    if "jokeru" in args.experiment:
+        dataset_path, dataset_mixing_weights = get_data_path("jokeru")
+    elif "gr1" in args.experiment:
         dataset_path, dataset_mixing_weights = get_data_path("gr1")
     elif "g1" in args.experiment:
         dataset_path, dataset_mixing_weights = get_data_path("g1")

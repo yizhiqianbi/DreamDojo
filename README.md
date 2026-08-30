@@ -35,10 +35,32 @@
 - [jokeru 2B Post-Training](docs/JOKERU_POSTTRAIN.md)
 - [Our Jokeru Inference Results](inference_results/README.md)
 - [π0.5 Fine-Tuning and Parallel-World Rollouts](docs/PI05_PARALLEL_WORLDS.md)
+- [8 × 48-Step Parallel-World Artifact](inference_results/pi05_parallel_worlds_48_x8/README.md)
+- [Jokeru Self-Forcing Integration](integrations/self_forcing/README.md)
 - [Interactive π0.5 × DreamDojo Viewer](https://dreamdojo-jokeru-lab.boingshaw.chatgpt.site)
 - [DreamDojo Distillation](https://github.com/NVIDIA/DreamDojo/blob/main/docs/DISTILL.md)
 - [Evaluation](https://github.com/NVIDIA/DreamDojo/blob/main/docs/EVAL.md)
 - [Trouble Shooting](https://github.com/NVIDIA/DreamDojo/blob/main/docs/ISSUES.md)
+
+## Jokeru Parallel-World Lab
+
+This fork adds an end-to-end mock VLA/world-model loop on the downloaded Jokeru datasets:
+
+```text
+recorded Jokeru observation
+        ↓
+π0.5 (8 independent flow-matching samples, 48 × 30D each)
+        ↓
+Jokeru action projector (48 × 384D each)
+        ↓
+DreamDojo (4 chained 12-action windows per branch)
+        ↓
+8 generated 49-frame parallel futures
+```
+
+The checked-in artifact contains all eight action arrays, all eight 7.25 FPS videos, the recorded observation replay, and 28 pairwise video-difference measurements. The [web viewer](https://dreamdojo-jokeru-lab.boingshaw.chatgpt.site) renders this graph on a pannable and zoomable canvas; click any universe to inspect its generated video.
+
+The official DreamDojo Self-Forcing pipeline is also adapted to Jokeru's 384D action conditioning. It includes teacher-trajectory caching, causal warmup, Self-Forcing DMD training, readiness checks, and 4-step compiled student inference. NVIDIA does not publish a Jokeru-specific distilled student checkpoint, so the current videos are explicitly teacher outputs; accelerated-student performance is reported only after those training stages produce a checkpoint.
 
 ## ⭐ Citation
 

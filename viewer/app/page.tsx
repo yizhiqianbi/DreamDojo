@@ -1,29 +1,22 @@
 'use client';
 
-import type { CSSProperties } from 'react';
 import { useMemo, useState } from 'react';
 import {
   Activity,
   BrainCircuit,
   Check,
   ChevronRight,
-  CircleDot,
-  Cpu,
   Database,
   FlaskConical,
   Gauge,
   GitBranch,
-  Layers3,
-  Play,
-  Radio,
-  RotateCcw,
   Search,
   Sparkles,
   Timer,
-  Video,
   Zap,
 } from 'lucide-react';
 
+import { ParallelWorldCanvas } from '@/components/parallel-world-canvas';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -50,54 +43,6 @@ type Evaluation = {
   zeroVideo?: string;
   zeroMetrics?: Metrics;
 };
-
-type Universe = {
-  id: number;
-  name: string;
-  seed: number;
-  color: string;
-  video: string;
-  actionRms: number;
-  inferMs: number;
-  pairwise: string;
-  bars: number[];
-};
-
-const universes: Universe[] = [
-  {
-    id: 0,
-    name: 'Universe A',
-    seed: 20260830,
-    color: '#a3ff52',
-    video: '/videos/parallel/universe-00.mp4',
-    actionRms: 0,
-    inferMs: 15336.5,
-    pairwise: 'reference branch',
-    bars: [18, 90, 61, 38, 71, 64, 66, 41, 92, 61, 79, 57, 65, 31, 47, 51, 76, 31, 83, 64, 51, 29, 43, 56, 44, 59, 33, 29, 28, 42, 70, 91, 85, 56, 52, 53, 56, 24, 47, 19, 73, 40, 18, 48, 46, 18, 72, 78],
-  },
-  {
-    id: 1,
-    name: 'Universe B',
-    seed: 20260831,
-    color: '#52d9ff',
-    video: '/videos/parallel/universe-01.mp4',
-    actionRms: 0.0986,
-    inferMs: 74.2,
-    pairwise: '18.12 dB vs A',
-    bars: [18, 69, 87, 52, 40, 50, 40, 31, 34, 46, 40, 23, 36, 37, 54, 19, 87, 18, 36, 64, 34, 52, 55, 56, 33, 54, 41, 67, 45, 88, 26, 18, 18, 78, 34, 68, 73, 91, 85, 47, 66, 43, 92, 43, 83, 56, 75, 85],
-  },
-  {
-    id: 2,
-    name: 'Universe C',
-    seed: 20260832,
-    color: '#ffbf5b',
-    video: '/videos/parallel/universe-02.mp4',
-    actionRms: 0.1094,
-    inferMs: 81.5,
-    pairwise: '18.15 dB vs A',
-    bars: [18, 85, 92, 32, 47, 57, 56, 52, 46, 49, 55, 22, 34, 43, 89, 92, 66, 36, 21, 37, 29, 25, 27, 46, 49, 26, 30, 18, 34, 30, 22, 22, 31, 31, 42, 18, 18, 48, 70, 46, 45, 37, 37, 41, 42, 36, 52, 56],
-  },
-];
 
 const evaluations: Evaluation[] = [
   { id: 0, name: 'Arrange patch', shortName: 'Arrange patch', family: 'orange juice + green tea', video: '/videos/normal-0000.mp4', metrics: { psnr: 28.286, ssim: 0.958, lpips: 0.062 } },
@@ -131,6 +76,8 @@ function Metric({ label, value, kind }: { label: string; value: number; kind: ke
   );
 }
 
+/* Legacy card-based parallel workspace retained in repository history; the active
+ * implementation is the interactive canvas component.
 function ActionTrace({ universe }: { universe: Universe }) {
   return (
     <div className="action-trace" aria-label={`${universe.name} 48-step action magnitude trace`}>
@@ -281,6 +228,7 @@ function ParallelWorkspace() {
     </div>
   );
 }
+*/
 
 function EvaluationWorkspace() {
   const [selectedId, setSelectedId] = useState(6);
@@ -350,7 +298,7 @@ export default function Home() {
           <div className="hidden items-center gap-2 xl:flex"><Badge variant="outline" className="border-border/80 bg-card/50 font-mono text-muted-foreground"><Timer className="size-3" /> warm VLA 74–81ms</Badge><Badge className="border border-primary/25 bg-primary/10 text-primary"><span className="size-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]" />LoRA smoke passed</Badge></div>
         </div>
       </header>
-      {workspace === 'parallel' ? <ParallelWorkspace /> : <EvaluationWorkspace />}
+      {workspace === 'parallel' ? <ParallelWorldCanvas /> : <EvaluationWorkspace />}
     </main>
   );
 }

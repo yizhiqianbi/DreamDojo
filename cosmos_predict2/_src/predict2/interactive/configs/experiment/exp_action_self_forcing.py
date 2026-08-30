@@ -367,6 +367,31 @@ ACTION_GR00T_PRETRAIN_SELF_FORCING = make_experiment(
     ),
 )
 
+ACTION_JOKERU_SELF_FORCING = make_experiment(
+    name="jokeru",
+    data="jokeru_long",
+    overrides=dict(
+        job=dict(
+            project="dreamdojo",
+            group="jokeru_self_forcing",
+        ),
+        # This path is overridden by scripts/run_jokeru_self_forcing.sh when a
+        # concrete warmup checkpoint is selected.
+        checkpoint=dict(
+            load_path="outputs/self_forcing/jokeru/warmup/checkpoints/iter_000020000",
+        ),
+        model=dict(
+            config=dict(
+                resolution="480",
+                teacher_load_from=dict(
+                    load_path="outputs/self_forcing/jokeru/warmup/checkpoints/iter_000020000/model",
+                    credentials="",
+                ),
+            ),
+        ),
+    ),
+)
+
 cs = ConfigStore.instance()
 
 cs.store(
@@ -404,4 +429,10 @@ cs.store(
     package="_global_",
     name="cosmos_predict2p5_2B_action_gr00t_pretrain_self_forcing_no_s3",
     node=build_no_s3_run(ACTION_GR00T_PRETRAIN_SELF_FORCING),
+)
+cs.store(
+    group="experiment",
+    package="_global_",
+    name="dreamdojo_2b_action_jokeru_self_forcing_no_s3",
+    node=build_no_s3_run(ACTION_JOKERU_SELF_FORCING),
 )

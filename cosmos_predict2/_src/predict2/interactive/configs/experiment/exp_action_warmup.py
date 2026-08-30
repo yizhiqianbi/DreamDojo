@@ -182,6 +182,25 @@ ACTION_GR00T_WARMUP_PRETRAIN = make_experiment(
     ),
 )
 
+ACTION_JOKERU_WARMUP = make_experiment(
+    name="jokeru",
+    data="jokeru_warmup",
+    overrides=dict(
+        job=dict(
+            project="dreamdojo",
+            group="jokeru_self_forcing_warmup",
+        ),
+        checkpoint=dict(
+            # Start the causal student from the completed Jokeru teacher weights.
+            load_path=(
+                "outputs/dreamdojo/jokeru_posttrain/"
+                "jokeru_2b_8gpu_posttrain_20260829/checkpoints/iter_000003000"
+            ),
+        ),
+        model=dict(config=dict(resolution=480)),
+    ),
+)
+
 """
 torchrun --nproc_per_node=1 --master_port=12341 -m scripts.train --config=cosmos_predict2/_src/predict2/interactive/configs/config_warmup.py -- experiment=cosmos_predict2p5_2B_action_gr00t_gr1_warmup
 """
@@ -235,4 +254,10 @@ cs.store(
     package="_global_",
     name="cosmos_predict2p5_2B_action_gr00t_pretrain_warmup_no_s3",
     node=build_no_s3_run(ACTION_GR00T_WARMUP_PRETRAIN),
+)
+cs.store(
+    group="experiment",
+    package="_global_",
+    name="dreamdojo_2b_action_jokeru_warmup_no_s3",
+    node=build_no_s3_run(ACTION_JOKERU_WARMUP),
 )

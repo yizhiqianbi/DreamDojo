@@ -64,6 +64,11 @@ dataset_gr00t_old_gr1_cosmos_warmup = L(ActionDatasetSFWarmup)(
     cr1_embeddings_path="datasets/cr1_empty_string_text_embeddings.pt",
 )
 
+dataset_jokeru_warmup = L(ActionDatasetSFWarmup)(
+    data_path="outputs/self_forcing/jokeru/teacher_cache",
+    cr1_embeddings_path="datasets/cr1_empty_string_text_embeddings.pt",
+)
+
 # ----------- Standard GR00T Datasets -----------
 
 from groot_dreams.dataloader import MultiVideoActionDataset, get_data_path
@@ -164,6 +169,22 @@ gr00t_customized_pretrain_dataset_long = L(MultiVideoActionDataset)(
     cr1_embeddings_path="datasets/cr1_empty_string_text_embeddings.pt"
 )
 
+jokeru_path, jokeru_mixing_weights = get_data_path("jokeru")
+jokeru_dataset = L(MultiVideoActionDataset)(
+    num_frames=13,
+    dataset_path=jokeru_path,
+    dataset_mixing_weights=jokeru_mixing_weights,
+    data_split="train",
+    cr1_embeddings_path="datasets/cr1_empty_string_text_embeddings.pt",
+)
+jokeru_dataset_long = L(MultiVideoActionDataset)(
+    num_frames=49,
+    dataset_path=jokeru_path,
+    dataset_mixing_weights=jokeru_mixing_weights,
+    data_split="train",
+    cr1_embeddings_path="datasets/cr1_empty_string_text_embeddings.pt",
+)
+
 # ----------- Dataloaders -----------
 
 
@@ -245,6 +266,12 @@ def register_interactive_data():
         cs.store(
             group=f"data_{split}",
             package=f"dataloader_{split}",
+            name="jokeru_warmup",
+            node=L(make_dataloader)(dataset=dataset_jokeru_warmup),
+        )
+        cs.store(
+            group=f"data_{split}",
+            package=f"dataloader_{split}",
             name="gr00t_customized_gr1",
             node=L(make_dataloader)(dataset=gr00t_customized_gr1_dataset, num_workers=0, pin_memory=False),
         )
@@ -313,4 +340,16 @@ def register_interactive_data():
             package=f"dataloader_{split}",
             name="gr00t_customized_pretrain_long",
             node=L(make_dataloader)(dataset=gr00t_customized_pretrain_dataset_long, num_workers=0, pin_memory=False),
+        )
+        cs.store(
+            group=f"data_{split}",
+            package=f"dataloader_{split}",
+            name="jokeru",
+            node=L(make_dataloader)(dataset=jokeru_dataset, num_workers=0, pin_memory=False),
+        )
+        cs.store(
+            group=f"data_{split}",
+            package=f"dataloader_{split}",
+            name="jokeru_long",
+            node=L(make_dataloader)(dataset=jokeru_dataset_long, num_workers=0, pin_memory=False),
         )

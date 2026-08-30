@@ -220,6 +220,65 @@
   .diagnostic small {
     @apply mt-auto pt-2 text-[9px] text-muted-foreground;
   }
+
+  .parallel-canvas-shell {
+    @apply relative min-h-[560px] overflow-hidden rounded-2xl border border-border/80 bg-[oklch(0.095_0.018_252)] shadow-inner;
+  }
+
+  .parallel-canvas {
+    @apply block h-[560px] w-full cursor-grab touch-none select-none;
+  }
+
+  .parallel-canvas.is-dragging {
+    @apply cursor-grabbing;
+  }
+
+  .canvas-toolbar {
+    @apply absolute left-3 top-3 flex items-center gap-1 rounded-xl border border-border/80 bg-background/82 p-1 shadow-xl backdrop-blur-xl;
+  }
+
+  .canvas-toolbar button {
+    @apply size-8 rounded-lg border-border/80 bg-secondary/45;
+  }
+
+  .canvas-toolbar svg {
+    @apply size-3.5;
+  }
+
+  .canvas-hint {
+    @apply pointer-events-none absolute bottom-3 left-3 flex items-center gap-1.5 rounded-lg border border-border/70 bg-background/78 px-2.5 py-1.5 font-mono text-[9px] uppercase tracking-[0.11em] text-muted-foreground backdrop-blur-xl;
+  }
+
+  .canvas-scale {
+    @apply pointer-events-none absolute bottom-3 right-3 rounded-lg border border-border/70 bg-background/78 px-2.5 py-1.5 font-mono text-[9px] text-muted-foreground backdrop-blur-xl;
+  }
+
+  .universe-inspector {
+    @apply overflow-hidden rounded-2xl border border-border/80 bg-secondary/18;
+  }
+
+  .self-force-stage {
+    @apply flex min-h-24 flex-col rounded-xl border border-border/65 bg-secondary/22 p-3;
+  }
+
+  .self-force-stage span {
+    @apply font-mono text-[9px] text-primary;
+  }
+
+  .self-force-stage strong {
+    @apply mt-2 text-[11px] font-semibold;
+  }
+
+  .self-force-stage small {
+    @apply mt-auto pt-2 text-[9px] leading-snug text-muted-foreground;
+  }
+}
+
+.canvas-workspace-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 370px);
+  gap: 0.9rem;
+  padding: 1rem;
 }
 
 .parallel-map {
@@ -242,6 +301,31 @@
 @media (max-width: 767px) {
   .parallel-map {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .canvas-workspace-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .parallel-canvas-shell,
+  .parallel-canvas {
+    min-height: 480px;
+    height: 480px;
+  }
+
+  .canvas-hint {
+    display: none;
+  }
+}
+
+@media (max-width: 1180px) and (min-width: 768px) {
+  .canvas-workspace-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .universe-inspector {
+    display: grid;
+    grid-template-columns: minmax(230px, 0.72fr) minmax(340px, 1.28fr);
   }
 }
 
