@@ -162,28 +162,6 @@
     @apply size-1.5 rounded-full bg-primary shadow-[0_0_9px_var(--primary)];
   }
 
-  .edit-timeline {
-    @apply mt-3 grid grid-cols-2 gap-2 lg:grid-cols-4;
-  }
-
-  .edit-beat {
-    @apply relative flex min-h-20 gap-3 overflow-hidden rounded-xl border border-border/65 bg-secondary/22 p-3;
-  }
-
-  .edit-beat::before {
-    content: '';
-    @apply absolute bottom-0 left-0 h-0.5 bg-primary/55;
-    width: calc(34% + var(--beat-progress, 0%));
-  }
-
-  .edit-beat:nth-child(2)::before { width: 62%; }
-  .edit-beat:nth-child(3)::before { width: 100%; }
-  .edit-beat:nth-child(4)::before { width: 42%; }
-
-  .edit-beat-index {
-    @apply grid size-7 shrink-0 place-items-center rounded-lg border border-primary/20 bg-primary/8 font-mono text-[9px] text-primary;
-  }
-
   .source-card {
     @apply overflow-hidden rounded-2xl border border-border/80 bg-secondary/22;
   }

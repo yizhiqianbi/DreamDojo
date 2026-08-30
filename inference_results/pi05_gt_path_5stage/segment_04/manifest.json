@@ -1,0 +1,357 @@
+{
+  "schema_version": 1,
+  "observation_mode": "recorded-video-replay",
+  "action_mode": "pi05-flow-matching",
+  "pi05_config": "pi05_jokeru_base_inference_48",
+  "pi05_checkpoint": "gs://openpi-assets/checkpoints/pi05_base",
+  "action_horizon": 48,
+  "dreamdojo_chunk_size": 12,
+  "dataset": "arrange_orange_juice_and_green_tea",
+  "episode": 0,
+  "merged_episode": 0,
+  "step": 244,
+  "source_frame": 976,
+  "prompt": "arrange the orange juice and green tea neatly",
+  "observation_image": "observation.png",
+  "observation_video": "observation_replay.mp4",
+  "universes": [
+    {
+      "id": 0,
+      "seed": 20261130,
+      "pi05_actions": "universe_00_pi05_actions.npy",
+      "dreamdojo_actions": "universe_00_dreamdojo_actions.npy",
+      "action_rms_from_universe_0": 0.0,
+      "pi05_infer_ms": 16535.08565761149,
+      "video": "universe_00.mp4",
+      "dreamdojo_chunks": [
+        {
+          "index": 0,
+          "action_start": 0,
+          "action_end": 12,
+          "seed": 20261130
+        },
+        {
+          "index": 1,
+          "action_start": 12,
+          "action_end": 24,
+          "seed": 20271130
+        },
+        {
+          "index": 2,
+          "action_start": 24,
+          "action_end": 36,
+          "seed": 20281130
+        },
+        {
+          "index": 3,
+          "action_start": 36,
+          "action_end": 48,
+          "seed": 20291130
+        }
+      ],
+      "generated_video_frames": 49
+    },
+    {
+      "id": 1,
+      "seed": 20261131,
+      "pi05_actions": "universe_01_pi05_actions.npy",
+      "dreamdojo_actions": "universe_01_dreamdojo_actions.npy",
+      "action_rms_from_universe_0": 0.10921786254024833,
+      "pi05_infer_ms": 64.92413580417633,
+      "video": "universe_01.mp4",
+      "dreamdojo_chunks": [
+        {
+          "index": 0,
+          "action_start": 0,
+          "action_end": 12,
+          "seed": 20261131
+        },
+        {
+          "index": 1,
+          "action_start": 12,
+          "action_end": 24,
+          "seed": 20271131
+        },
+        {
+          "index": 2,
+          "action_start": 24,
+          "action_end": 36,
+          "seed": 20281131
+        },
+        {
+          "index": 3,
+          "action_start": 36,
+          "action_end": 48,
+          "seed": 20291131
+        }
+      ],
+      "generated_video_frames": 49
+    },
+    {
+      "id": 2,
+      "seed": 20261132,
+      "pi05_actions": "universe_02_pi05_actions.npy",
+      "dreamdojo_actions": "universe_02_dreamdojo_actions.npy",
+      "action_rms_from_universe_0": 0.09096444647976863,
+      "pi05_infer_ms": 83.23404379189014,
+      "video": "universe_02.mp4",
+      "dreamdojo_chunks": [
+        {
+          "index": 0,
+          "action_start": 0,
+          "action_end": 12,
+          "seed": 20261132
+        },
+        {
+          "index": 1,
+          "action_start": 12,
+          "action_end": 24,
+          "seed": 20271132
+        },
+        {
+          "index": 2,
+          "action_start": 24,
+          "action_end": 36,
+          "seed": 20281132
+        },
+        {
+          "index": 3,
+          "action_start": 36,
+          "action_end": 48,
+          "seed": 20291132
+        }
+      ],
+      "generated_video_frames": 49
+    },
+    {
+      "id": 3,
+      "seed": 20261133,
+      "pi05_actions": "universe_03_pi05_actions.npy",
+      "dreamdojo_actions": "universe_03_dreamdojo_actions.npy",
+      "action_rms_from_universe_0": 0.12330013658723944,
+      "pi05_infer_ms": 83.55226926505566,
+      "video": "universe_03.mp4",
+      "dreamdojo_chunks": [
+        {
+          "index": 0,
+          "action_start": 0,
+          "action_end": 12,
+          "seed": 20261133
+        },
+        {
+          "index": 1,
+          "action_start": 12,
+          "action_end": 24,
+          "seed": 20271133
+        },
+        {
+          "index": 2,
+          "action_start": 24,
+          "action_end": 36,
+          "seed": 20281133
+        },
+        {
+          "index": 3,
+          "action_start": 36,
+          "action_end": 48,
+          "seed": 20291133
+        }
+      ],
+      "generated_video_frames": 49
+    },
+    {
+      "id": 4,
+      "seed": 20261134,
+      "pi05_actions": "universe_04_pi05_actions.npy",
+      "dreamdojo_actions": "universe_04_dreamdojo_actions.npy",
+      "action_rms_from_universe_0": 0.10468653551214999,
+      "pi05_infer_ms": 83.16433057188988,
+      "video": "universe_04.mp4",
+      "dreamdojo_chunks": [
+        {
+          "index": 0,
+          "action_start": 0,
+          "action_end": 12,
+          "seed": 20261134
+        },
+        {
+          "index": 1,
+          "action_start": 12,
+          "action_end": 24,
+          "seed": 20271134
+        },
+        {
+          "index": 2,
+          "action_start": 24,
+          "action_end": 36,
+          "seed": 20281134
+        },
+        {
+          "index": 3,
+          "action_start": 36,
+          "action_end": 48,
+          "seed": 20291134
+        }
+      ],
+      "generated_video_frames": 49
+    },
+    {
+      "id": 5,
+      "seed": 20261135,
+      "pi05_actions": "universe_05_pi05_actions.npy",
+      "dreamdojo_actions": "universe_05_dreamdojo_actions.npy",
+      "action_rms_from_universe_0": 0.14562112764716872,
+      "pi05_infer_ms": 83.63693952560425,
+      "video": "universe_05.mp4",
+      "dreamdojo_chunks": [
+        {
+          "index": 0,
+          "action_start": 0,
+          "action_end": 12,
+          "seed": 20261135
+        },
+        {
+          "index": 1,
+          "action_start": 12,
+          "action_end": 24,
+          "seed": 20271135
+        },
+        {
+          "index": 2,
+          "action_start": 24,
+          "action_end": 36,
+          "seed": 20281135
+        },
+        {
+          "index": 3,
+          "action_start": 36,
+          "action_end": 48,
+          "seed": 20291135
+        }
+      ],
+      "generated_video_frames": 49
+    },
+    {
+      "id": 6,
+      "seed": 20261136,
+      "pi05_actions": "universe_06_pi05_actions.npy",
+      "dreamdojo_actions": "universe_06_dreamdojo_actions.npy",
+      "action_rms_from_universe_0": 0.11915109774988462,
+      "pi05_infer_ms": 83.45874398946762,
+      "video": "universe_06.mp4",
+      "dreamdojo_chunks": [
+        {
+          "index": 0,
+          "action_start": 0,
+          "action_end": 12,
+          "seed": 20261136
+        },
+        {
+          "index": 1,
+          "action_start": 12,
+          "action_end": 24,
+          "seed": 20271136
+        },
+        {
+          "index": 2,
+          "action_start": 24,
+          "action_end": 36,
+          "seed": 20281136
+        },
+        {
+          "index": 3,
+          "action_start": 36,
+          "action_end": 48,
+          "seed": 20291136
+        }
+      ],
+      "generated_video_frames": 49
+    }
+  ],
+  "pairwise_video_difference": {
+    "u0_u1": {
+      "pixel_psnr_db": 18.193271073284535,
+      "last_frame_mae": 0.056220803409814835
+    },
+    "u0_u2": {
+      "pixel_psnr_db": 20.01465075776232,
+      "last_frame_mae": 0.037142932415008545
+    },
+    "u0_u3": {
+      "pixel_psnr_db": 18.46688614050364,
+      "last_frame_mae": 0.039050620049238205
+    },
+    "u0_u4": {
+      "pixel_psnr_db": 20.217994407084504,
+      "last_frame_mae": 0.04929295927286148
+    },
+    "u0_u5": {
+      "pixel_psnr_db": 19.095166024946536,
+      "last_frame_mae": 0.05338798090815544
+    },
+    "u0_u6": {
+      "pixel_psnr_db": 19.576628819082725,
+      "last_frame_mae": 0.04023180902004242
+    },
+    "u1_u2": {
+      "pixel_psnr_db": 18.452570712615778,
+      "last_frame_mae": 0.05585833638906479
+    },
+    "u1_u3": {
+      "pixel_psnr_db": 18.208425404832262,
+      "last_frame_mae": 0.057131316512823105
+    },
+    "u1_u4": {
+      "pixel_psnr_db": 16.874839099133673,
+      "last_frame_mae": 0.0642763301730156
+    },
+    "u1_u5": {
+      "pixel_psnr_db": 18.550606326793876,
+      "last_frame_mae": 0.057337235659360886
+    },
+    "u1_u6": {
+      "pixel_psnr_db": 18.85242150546835,
+      "last_frame_mae": 0.06035246700048447
+    },
+    "u2_u3": {
+      "pixel_psnr_db": 21.694940639146072,
+      "last_frame_mae": 0.022478610277175903
+    },
+    "u2_u4": {
+      "pixel_psnr_db": 18.053834171048095,
+      "last_frame_mae": 0.05420519784092903
+    },
+    "u2_u5": {
+      "pixel_psnr_db": 17.446856756116844,
+      "last_frame_mae": 0.05921778082847595
+    },
+    "u2_u6": {
+      "pixel_psnr_db": 19.612834179095092,
+      "last_frame_mae": 0.04380108043551445
+    },
+    "u3_u4": {
+      "pixel_psnr_db": 17.195413331578354,
+      "last_frame_mae": 0.05451776459813118
+    },
+    "u3_u5": {
+      "pixel_psnr_db": 16.734570447857486,
+      "last_frame_mae": 0.059153519570827484
+    },
+    "u3_u6": {
+      "pixel_psnr_db": 18.653964692842678,
+      "last_frame_mae": 0.044035665690898895
+    },
+    "u4_u5": {
+      "pixel_psnr_db": 18.85564089145585,
+      "last_frame_mae": 0.048480503261089325
+    },
+    "u4_u6": {
+      "pixel_psnr_db": 17.993590753037246,
+      "last_frame_mae": 0.04682733491063118
+    },
+    "u5_u6": {
+      "pixel_psnr_db": 18.26076547175914,
+      "last_frame_mae": 0.04849110171198845
+    }
+  }
+}

@@ -5,16 +5,19 @@ post-training run. All results use the BF16 EMA checkpoint at iteration 3,000.
 The model input is the first RGB frame plus a sequence of robot actions; the
 output is an action-conditioned video continuation.
 
-## π0.5 48-step parallel-world results
+## π0.5 five-stage parallel-world results
 
-The current eight-branch artifact lives in
-[`pi05_parallel_worlds_48_x8`](pi05_parallel_worlds_48_x8). It contains eight
-independent 48-step π0.5 samples, their `[48, 30]` action arrays, eight chained
-49-frame DreamDojo futures, and all pairwise video-difference measurements. A
-15.2-second 1080p director's cut presents the shared Observation and
-Instruction, reveals the eight real Future Action traces, and then plays all
-eight Future Videos in sync. It is embedded at the top of the
+The current long-path artifact lives in
+[`pi05_gt_path_5stage`](pi05_gt_path_5stage). It contains five consecutive
+48-step stages along a 240-step recorded path. At each stage, seven independently
+sampled π0.5 action chunks drive seven DreamDojo futures while one hidden slot
+contains the matching recorded action and video. After the eight futures play,
+the GT slot is revealed and its endpoint becomes the next observation. The
+46.5-second 1080p edit is embedded at the top of the
 [interactive viewer](https://dreamdojo-jokeru-lab.boingshaw.chatgpt.site).
+
+The original single-stage eight-branch artifact is preserved in
+[`pi05_parallel_worlds_48_x8`](pi05_parallel_worlds_48_x8).
 
 The original three-branch run is preserved below as an earlier baseline.
 

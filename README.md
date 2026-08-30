@@ -36,6 +36,7 @@
 - [Our Jokeru Inference Results](inference_results/README.md)
 - [π0.5 Fine-Tuning and Parallel-World Rollouts](docs/PI05_PARALLEL_WORLDS.md)
 - [8 × 48-Step Parallel-World Artifact](inference_results/pi05_parallel_worlds_48_x8/README.md)
+- [5-Stage GT-Anchored Parallel Futures](inference_results/pi05_gt_path_5stage/README.md)
 - [Jokeru Self-Forcing Integration](integrations/self_forcing/README.md)
 - [Interactive π0.5 × DreamDojo Viewer](https://dreamdojo-jokeru-lab.boingshaw.chatgpt.site)
 - [DreamDojo Distillation](https://github.com/NVIDIA/DreamDojo/blob/main/docs/DISTILL.md)
@@ -58,7 +59,7 @@ DreamDojo (4 chained 12-action windows per branch)
 8 generated 49-frame parallel futures
 ```
 
-The checked-in artifact contains all eight action arrays, all eight 7.25 FPS videos, the recorded observation replay, 28 pairwise video-difference measurements, and a reproducible 1080p parallel-universe director's cut. The [web viewer](https://dreamdojo-jokeru-lab.boingshaw.chatgpt.site) opens with the edited showcase, then renders the full graph on a pannable and zoomable canvas; click any universe to inspect its generated video.
+The current long-path artifact follows five consecutive 48-step stages. Each stage contains seven sampled π0.5/DreamDojo futures and one hidden recorded GT future; after all eight play, the GT branch is revealed and its endpoint becomes the next observation. The resulting 240-step path and reproducible 46.5-second 1080p edit are included in the repository. The [web viewer](https://dreamdojo-jokeru-lab.boingshaw.chatgpt.site) opens with this five-layer showcase, then renders the original one-stage graph on a pannable and zoomable canvas.
 
 The official DreamDojo Self-Forcing pipeline is also adapted to Jokeru's 384D action conditioning. It includes teacher-trajectory caching, causal warmup, Self-Forcing DMD training, readiness checks, and 4-step compiled student inference. NVIDIA does not publish a Jokeru-specific distilled student checkpoint, so the current videos are explicitly teacher outputs; accelerated-student performance is reported only after those training stages produce a checkpoint.
 

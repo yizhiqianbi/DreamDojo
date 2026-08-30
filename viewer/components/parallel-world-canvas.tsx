@@ -400,10 +400,10 @@ export function ParallelWorldCanvas() {
             <div className="flex items-start gap-3">
               <div className="stat-icon"><Clapperboard /></div>
               <div>
-                <p className="eyebrow">Director&apos;s cut · 15.2 seconds</p>
-                <h2 id="director-cut-title" className="mt-1 text-base font-semibold sm:text-lg">Observation → 8 Future Actions → 8 Future Videos</h2>
+                <p className="eyebrow">5-layer GT path · 46.5 seconds</p>
+                <h2 id="director-cut-title" className="mt-1 text-base font-semibold sm:text-lg">8 candidates → select GT → continue</h2>
                 <p className="mt-1 max-w-3xl text-[11px] leading-relaxed text-muted-foreground sm:text-xs">
-                  A staged parallel-universe edit built from the real frame, instruction, sampled π0.5 action traces, and synchronized DreamDojo rollouts.
+                  Five receding-horizon stages. Each stage rolls out seven model futures plus one hidden recorded future, then follows the revealed GT endpoint.
                 </p>
               </div>
             </div>
@@ -426,22 +426,9 @@ export function ParallelWorldCanvas() {
               playsInline
               preload="metadata"
               className="aspect-video w-full bg-black object-contain"
-              aria-label="DreamDojo parallel universe director cut"
+              aria-label="DreamDojo five-layer ground-truth path rollout"
             />
-            <div className="director-video-chip"><span /> 8 synchronized futures</div>
-          </div>
-          <div className="edit-timeline" aria-label="Video edit timeline">
-            {[
-              ['00:00–02:18', 'Establish', 'Observation + instruction'],
-              ['02:18–05:80', 'Branch', '8 real action traces'],
-              ['05:80–12:56', 'Roll out', '8 synchronized futures'],
-              ['12:56–15:20', 'Resolve', 'Parallel-world freeze'],
-            ].map(([time, beat, detail], index) => (
-              <div className="edit-beat" key={time}>
-                <span className="edit-beat-index">0{index + 1}</span>
-                <div><p className="font-mono text-[9px] text-primary">{time}</p><p className="mt-1 text-[11px] font-semibold">{beat}</p><p className="mt-1 text-[9px] text-muted-foreground">{detail}</p></div>
-              </div>
-            ))}
+            <div className="director-video-chip"><span /> 5 layers · 240 action steps</div>
           </div>
         </section>
 
