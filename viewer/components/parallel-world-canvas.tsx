@@ -4,8 +4,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Activity,
   BrainCircuit,
+  Clapperboard,
   ChevronRight,
   Cpu,
+  Download,
   GitBranch,
   Maximize2,
   MousePointer2,
@@ -392,6 +394,56 @@ export function ParallelWorldCanvas() {
             <Button className="bg-primary text-primary-foreground hover:bg-primary/90" onClick={() => setSelectedId((selectedId + 1) % universes.length)}><GitBranch className="size-3.5" /> Next universe</Button>
           </div>
         </div>
+
+        <section className="director-cut-shell" aria-labelledby="director-cut-title">
+          <div className="director-cut-heading">
+            <div className="flex items-start gap-3">
+              <div className="stat-icon"><Clapperboard /></div>
+              <div>
+                <p className="eyebrow">Director&apos;s cut · 15.2 seconds</p>
+                <h2 id="director-cut-title" className="mt-1 text-base font-semibold sm:text-lg">Observation → 8 Future Actions → 8 Future Videos</h2>
+                <p className="mt-1 max-w-3xl text-[11px] leading-relaxed text-muted-foreground sm:text-xs">
+                  A staged parallel-universe edit built from the real frame, instruction, sampled π0.5 action traces, and synchronized DreamDojo rollouts.
+                </p>
+              </div>
+            </div>
+            <Button
+              size="sm"
+              variant="outline"
+              render={<a href="/videos/parallel8/parallel-universe-directors-cut.mp4" download />}
+              className="border-border bg-secondary/35"
+            >
+              <Download className="size-3.5" /> Download MP4
+            </Button>
+          </div>
+          <div className="director-video-frame">
+            <video
+              src="/videos/parallel8/parallel-universe-directors-cut.mp4"
+              controls
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              className="aspect-video w-full bg-black object-contain"
+              aria-label="DreamDojo parallel universe director cut"
+            />
+            <div className="director-video-chip"><span /> 8 synchronized futures</div>
+          </div>
+          <div className="edit-timeline" aria-label="Video edit timeline">
+            {[
+              ['00:00–02:18', 'Establish', 'Observation + instruction'],
+              ['02:18–05:80', 'Branch', '8 real action traces'],
+              ['05:80–12:56', 'Roll out', '8 synchronized futures'],
+              ['12:56–15:20', 'Resolve', 'Parallel-world freeze'],
+            ].map(([time, beat, detail], index) => (
+              <div className="edit-beat" key={time}>
+                <span className="edit-beat-index">0{index + 1}</span>
+                <div><p className="font-mono text-[9px] text-primary">{time}</p><p className="mt-1 text-[11px] font-semibold">{beat}</p><p className="mt-1 text-[9px] text-muted-foreground">{detail}</p></div>
+              </div>
+            ))}
+          </div>
+        </section>
 
         <div className="grid grid-cols-2 border-b border-border/70 lg:grid-cols-5">
           {[

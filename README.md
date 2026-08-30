@@ -58,7 +58,7 @@ DreamDojo (4 chained 12-action windows per branch)
 8 generated 49-frame parallel futures
 ```
 
-The checked-in artifact contains all eight action arrays, all eight 7.25 FPS videos, the recorded observation replay, and 28 pairwise video-difference measurements. The [web viewer](https://dreamdojo-jokeru-lab.boingshaw.chatgpt.site) renders this graph on a pannable and zoomable canvas; click any universe to inspect its generated video.
+The checked-in artifact contains all eight action arrays, all eight 7.25 FPS videos, the recorded observation replay, 28 pairwise video-difference measurements, and a reproducible 1080p parallel-universe director's cut. The [web viewer](https://dreamdojo-jokeru-lab.boingshaw.chatgpt.site) opens with the edited showcase, then renders the full graph on a pannable and zoomable canvas; click any universe to inspect its generated video.
 
 The official DreamDojo Self-Forcing pipeline is also adapted to Jokeru's 384D action conditioning. It includes teacher-trajectory caching, causal warmup, Self-Forcing DMD training, readiness checks, and 4-step compiled student inference. NVIDIA does not publish a Jokeru-specific distilled student checkpoint, so the current videos are explicitly teacher outputs; accelerated-student performance is reported only after those training stages produce a checkpoint.
 

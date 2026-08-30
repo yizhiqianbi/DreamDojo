@@ -7,6 +7,17 @@ output is an action-conditioned video continuation.
 
 ## π0.5 48-step parallel-world results
 
+The current eight-branch artifact lives in
+[`pi05_parallel_worlds_48_x8`](pi05_parallel_worlds_48_x8). It contains eight
+independent 48-step π0.5 samples, their `[48, 30]` action arrays, eight chained
+49-frame DreamDojo futures, and all pairwise video-difference measurements. A
+15.2-second 1080p director's cut presents the shared Observation and
+Instruction, reveals the eight real Future Action traces, and then plays all
+eight Future Videos in sync. It is embedded at the top of the
+[interactive viewer](https://dreamdojo-jokeru-lab.boingshaw.chatgpt.site).
+
+The original three-branch run is preserved below as an earlier baseline.
+
 [`pi05_parallel_worlds_48`](pi05_parallel_worlds_48) contains one recorded
 Jokeru observation, three 48-step action plans sampled in one inference each by
 the real π0.5 base policy, and the three corresponding 49-frame DreamDojo

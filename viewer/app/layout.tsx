@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'DreamDojo × π0.5 · Parallel Worlds Lab',
     description:
-      'One recorded observation, three 48-step π0.5 action plans, and three 49-frame DreamDojo futures.',
+      'One recorded observation, eight 48-step π0.5 action plans, and eight 49-frame DreamDojo futures.',
     images: [
       {
         url: '/dreamdojo-jokeru-og.png',

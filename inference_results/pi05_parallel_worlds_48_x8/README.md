@@ -10,6 +10,11 @@ This artifact starts from the same recorded Jokeru observation at episode `0`, s
 - `universe_*_dreamdojo_actions.npy`: DreamDojo conditions with shape `[48, 384]`.
 - `manifest.json`: seeds, VLA timing, chunk boundaries, and all 28 pairwise video-difference measurements.
 - `final_frame_contact_sheet.png`: a visual QA grid of the eight final generated frames.
+- `../../viewer/public/videos/parallel8/parallel-universe-directors-cut.mp4`: a 15.2-second 1080p showcase edit that stages the recorded observation and instruction, reveals all eight real 48-step action traces, and then plays the eight generated futures in sync.
+
+## Director's cut
+
+The showcase video uses four editorial beats: establish the common observation, reveal the eight stochastic action branches, cut to the synchronized 4×2 future wall, and finish on the eight final states. It can be reproduced with `node scripts/render_parallel_universe_showcase.mjs`.
 
 All nine videos were decoded and verified as `640×480`, 49 frames, and `7.25 FPS`. Action RMS distance from Universe A ranges from `0.0778` to `0.1094`; final video PSNR against Universe A ranges from `16.40 dB` to `18.24 dB`, confirming that distinct policy samples produce visibly different generated futures.
 
