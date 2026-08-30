@@ -182,11 +182,15 @@
   }
 
   .action-trace {
-    @apply my-5 flex h-12 items-end gap-1 rounded-lg border border-border/60 bg-background/50 px-2 py-1.5;
+    @apply my-5 flex h-12 items-end gap-[2px] rounded-lg border border-border/60 bg-background/50 px-2 py-1.5;
   }
 
   .action-trace span {
     @apply min-h-1 flex-1 rounded-sm opacity-80;
+  }
+
+  .action-trace span:nth-child(12n):not(:last-child) {
+    margin-right: 3px;
   }
 
   .mini-readout {

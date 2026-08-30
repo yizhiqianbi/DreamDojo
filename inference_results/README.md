@@ -5,27 +5,32 @@ post-training run. All results use the BF16 EMA checkpoint at iteration 3,000.
 The model input is the first RGB frame plus a sequence of robot actions; the
 output is an action-conditioned video continuation.
 
-## π0.5 parallel-world results
+## π0.5 48-step parallel-world results
 
-[`pi05_parallel_worlds`](pi05_parallel_worlds) contains one recorded Jokeru
-observation, three action chunks sampled by the real π0.5 base policy, and the
-three corresponding 13-frame DreamDojo futures. The branches use explicit
-Gaussian flow-matching noise seeds `20260830`–`20260832`; they are samples from
-the policy, not hand-perturbed actions.
+[`pi05_parallel_worlds_48`](pi05_parallel_worlds_48) contains one recorded
+Jokeru observation, three 48-step action plans sampled in one inference each by
+the real π0.5 base policy, and the three corresponding 49-frame DreamDojo
+futures. DreamDojo chains four native 12-action windows per branch. The
+branches use explicit Gaussian flow-matching noise seeds
+`20260830`–`20260832`; they are samples from the policy, not hand-perturbed
+actions.
 
 | Branch | Action RMS from A | Warm/cold policy time | Video |
 |---|---:|---:|---|
-| A | 0.0000 | 14,142.7 ms (JIT cold start) | [video](pi05_parallel_worlds/universe_00.mp4) |
-| B | 0.0414 | 61.9 ms | [video](pi05_parallel_worlds/universe_01.mp4) |
-| C | 0.0553 | 78.4 ms | [video](pi05_parallel_worlds/universe_02.mp4) |
+| A | 0.0000 | 15,336.5 ms (JIT cold start) | [video](pi05_parallel_worlds_48/universe_00.mp4) |
+| B | 0.0986 | 74.2 ms | [video](pi05_parallel_worlds_48/universe_01.mp4) |
+| C | 0.1094 | 81.5 ms | [video](pi05_parallel_worlds_48/universe_02.mp4) |
 
-Pairwise full-video pixel PSNR is 18.30–20.02 dB, confirming that the same
+Pairwise full-video pixel PSNR is 17.35–18.15 dB, confirming that the same
 observation and prompt lead to visibly different generated futures. These
 artifacts use the upstream `pi05_base` weights before Jokeru fine-tuning. The
 Jokeru LoRA path was independently validated with a successful one-step train
 and checkpoint save; it must not be confused with a converged policy. See the
 [full integration guide](../docs/PI05_PARALLEL_WORLDS.md) and the
 [interactive viewer](https://dreamdojo-jokeru-lab.boingshaw.chatgpt.site).
+
+The earlier 12-step baseline is preserved under
+[`pi05_parallel_worlds`](pi05_parallel_worlds).
 
 ## Checkpoint and protocol
 

@@ -15,11 +15,13 @@ recorded Jokeru observation + task text
                   v
           π0.5 flow policy
         /          |          \
-  seed A        seed B       seed C       (12 × 30 absolute actions)
+  seed A        seed B       seed C       (48 × 30 absolute actions)
      |             |            |
-     +--- exact Jokeru -> DreamDojo bridge ---+   (12 × 384 deltas)
+     +--- exact Jokeru -> DreamDojo bridge ---+   (48 × 384 deltas)
      |             |            |
- DreamDojo A   DreamDojo B  DreamDojo C       (three 13-frame futures)
+  4 × 12-step native DreamDojo windows per branch
+     |             |            |
+ DreamDojo A   DreamDojo B  DreamDojo C       (three 49-frame futures)
 ```
 
 The mock control semantics are intentional. At control step `t`, all policy
@@ -48,7 +50,7 @@ view at `datasets/pi05_lerobot/jokeru/pi05_world_model`:
   Source videos at 28 or 30 FPS are timestamp-remuxed to a 29 FPS timebase
   without re-encoding; 29 FPS files are hard-linked.
 - The action stored at row `t` is the absolute command at source frame `t+4`,
-  so the 12-action policy horizon corresponds to the next 12 DreamDojo
+  so the 48-action policy horizon corresponds to the next 48 DreamDojo
   transitions.
 
 Build the view and quantile normalization assets:
@@ -63,8 +65,8 @@ are derived local artifacts.
 
 ## π0.5 LoRA configuration
 
-`pi05_jokeru_lora` applies LoRA to the PaliGemma 2B backbone and 300M action
-expert, uses 12-step chunks padded to OpenPI's 32D model action width, and trains
+`pi05_jokeru_lora_48` applies LoRA to the PaliGemma 2B backbone and 300M action
+expert, uses 48-step plans padded to OpenPI's 32D model action width, and trains
 with batch size 8. It is configured for 35,760 optimizer steps:
 
 ```text
@@ -82,7 +84,7 @@ CUDA_VISIBLE_DEVICES=0 \
 XLA_PYTHON_CLIENT_MEM_FRACTION=0.9 \
 uv run --project ../openpi python integrations/pi05/run_openpi.py \
   --openpi-root ../openpi \
-  scripts/train.py pi05_jokeru_lora \
+  scripts/train.py pi05_jokeru_lora_48 \
   --exp-name=jokeru_3ep \
   --no-wandb-enabled
 ```
@@ -91,23 +93,29 @@ For multi-GPU JAX training, expose the desired devices and keep the global
 batch divisible by the JAX device count. The default batch 8 is suitable for
 eight devices when capacity is available.
 
-The adapter was validated against a real transformed OpenPI sample: state
-`[32]`, actions `[12, 32]`, three images `[224, 224, 3]`, and 200 prompt tokens.
-A real batch-1, one-step LoRA smoke run restored the 12.5 GiB base parameters,
-completed with loss `0.8082`, gradient norm `3.6176`, parameter norm
-`1803.8630`, and wrote a restorable checkpoint. This proves the path runs; it
-is not a trained policy checkpoint.
+The 48-step adapter was validated against a real transformed OpenPI sample:
+state `[32]`, actions `[48, 32]`, three images `[224, 224, 3]`, and 200 prompt
+tokens. Before the horizon extension, a real batch-1, 12-step one-step LoRA
+smoke run restored the 12.5 GiB base parameters, completed with loss `0.8082`,
+gradient norm `3.6176`, parameter norm `1803.8630`, and wrote a restorable
+checkpoint. That checkpoint is only a training-path smoke artifact, not a
+converged policy.
 
 ## Action bridge
 
-π0.5 emits 12 absolute Jokeru controls. `bridge.py` converts them to the exact
-conditioning used during DreamDojo Jokeru post-training:
+π0.5 emits 48 absolute Jokeru controls in one inference. `bridge.py` converts
+them to the exact conditioning used during DreamDojo Jokeru post-training:
 
 1. Clip/min-max normalize with the source dataset's action statistics.
-2. Form four-step grouped deltas. Group 0 uses the recorded current action as
-   baseline; groups 1 and 2 use the preceding predicted action.
+2. Form twelve four-step delta groups. Group 0 uses the recorded current action
+   as baseline; later groups use the preceding predicted action.
 3. Embed 30D controls into DreamDojo indices `[169:199]`, or 15D right-arm
-   controls into `[199:214]`, in a `[12, 384]` tensor.
+   controls into `[199:214]`, in a `[48, 384]` tensor.
+
+DreamDojo remains on its native 12-action/13-frame window. The generator splits
+the 48 conditions into `[0:12]`, `[12:24]`, `[24:36]`, and `[36:48]`, feeds the
+last generated frame into the next window, removes the duplicated boundary
+frames, and writes one continuous 49-frame video.
 
 ## Sample and generate parallel worlds
 
@@ -121,14 +129,15 @@ bash scripts/run_pi05_parallel_worlds.sh \
 ```
 
 To use a completed fine-tuned policy, point `PI05_CHECKPOINT` at its checkpoint
-directory and pass `--config pi05_jokeru_lora`. The committed example instead
+directory and pass `--config pi05_jokeru_lora_48`. The committed example instead
 uses the official `pi05_base` checkpoint so its provenance is unambiguous.
 
-The committed run produced warm π0.5 samples in 61.9–78.4 ms after a 14.1 s
-JIT cold start. Action RMS divergence from branch A is 0.0414 and 0.0553.
-Pairwise generated-video PSNR is 18.30–20.02 dB, showing materially different
-DreamDojo futures from the fixed observation. See
-[`inference_results/pi05_parallel_worlds`](../inference_results/pi05_parallel_worlds).
+The committed 48-step run produced warm π0.5 samples in 74.2–81.5 ms after a
+15.3 s JIT cold start. Action RMS divergence from branch A is 0.0986 and
+0.1094. Each output contains 49 frames at 7.25 FPS; pairwise generated-video
+PSNR is 17.35–18.15 dB, showing materially different long futures from the
+fixed observation. See
+[`inference_results/pi05_parallel_worlds_48`](../inference_results/pi05_parallel_worlds_48).
 
 ## Key files
 

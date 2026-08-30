@@ -14,7 +14,7 @@ from openpi.training import data_loader
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--config", default="pi05_jokeru_lora")
+    parser.add_argument("--config", default="pi05_jokeru_lora_48")
     parser.add_argument("--index", type=int, default=100)
     args = parser.parse_args()
     config = config_lib.get_config(args.config)

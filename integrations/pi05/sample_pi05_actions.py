@@ -32,14 +32,20 @@ def _read_frame(video_path: Path, frame_index: int) -> np.ndarray:
     return cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
 
-def _write_observation_replay(video_path: Path, start_frame: int, output_path: Path) -> None:
+def _write_observation_replay(
+    video_path: Path,
+    start_frame: int,
+    output_path: Path,
+    *,
+    action_horizon: int,
+) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     height, width = 744, 960
     crop_height = int(width / (640 / 480))
     crop_y = (height - crop_height) // 2
     frame_filter = (
-        f"select='between(n,{start_frame},{start_frame + 48})*"
-        f"not(mod(n-{start_frame},4))',setpts=N/7/TB,"
+        f"select='between(n,{start_frame},{start_frame + action_horizon * 4})*"
+        f"not(mod(n-{start_frame},4))',setpts=4*N/29/TB,"
         f"crop={width}:{crop_height}:0:{crop_y},scale=640:480"
     )
     subprocess.run(
@@ -54,9 +60,9 @@ def _write_observation_replay(video_path: Path, start_frame: int, output_path: P
             "-vf",
             frame_filter,
             "-frames:v",
-            "13",
+            str(action_horizon + 1),
             "-r",
-            "7",
+            "7.25",
             "-an",
             "-c:v",
             "libx264",
@@ -71,7 +77,7 @@ def _write_observation_replay(video_path: Path, start_frame: int, output_path: P
 def main() -> None:
     repo_root = Path(__file__).resolve().parents[2]
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--config", default="pi05_jokeru_base_inference")
+    parser.add_argument("--config", default="pi05_jokeru_base_inference_48")
     parser.add_argument("--checkpoint", default="gs://openpi-assets/checkpoints/pi05_base")
     parser.add_argument("--episode", type=int, default=0)
     parser.add_argument("--step", type=int, default=100)
@@ -85,7 +91,7 @@ def main() -> None:
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=repo_root / "inference_results/pi05_parallel_worlds",
+        default=repo_root / "inference_results/pi05_parallel_worlds_48",
     )
     args = parser.parse_args()
 
@@ -148,7 +154,12 @@ def main() -> None:
         cv2.cvtColor(observation["observation/left_eye"], cv2.COLOR_RGB2BGR),
     )
     replay_path = output_dir / "observation_replay.mp4"
-    _write_observation_replay(video_paths["observation.images.left_eye"], source_frame, replay_path)
+    _write_observation_replay(
+        video_paths["observation.images.left_eye"],
+        source_frame,
+        replay_path,
+        action_horizon=int(config.model.action_horizon),
+    )
     source_stats = repo_root / "datasets/jokeru" / source["dataset"] / "meta/stats.json"
     universes = []
     reference_actions = None
@@ -190,6 +201,8 @@ def main() -> None:
         "action_mode": "pi05-flow-matching",
         "pi05_config": args.config,
         "pi05_checkpoint": args.checkpoint,
+        "action_horizon": int(config.model.action_horizon),
+        "dreamdojo_chunk_size": 12,
         "dataset": source["dataset"],
         "episode": int(source["source_episode_index"]),
         "merged_episode": args.episode,

@@ -112,7 +112,7 @@ def get_configs() -> list[config_lib.TrainConfig]:
     lora_model = pi0_config.Pi0Config(
         pi05=True,
         action_dim=32,
-        action_horizon=12,
+        action_horizon=48,
         paligemma_variant="gemma_2b_lora",
         action_expert_variant="gemma_300m_lora",
     )
@@ -126,7 +126,7 @@ def get_configs() -> list[config_lib.TrainConfig]:
     }
     return [
         config_lib.TrainConfig(
-            name="pi05_jokeru_lora",
+            name="pi05_jokeru_lora_48",
             model=lora_model,
             data=_data_config(),
             weight_loader=weight_loaders.CheckpointWeightLoader(
@@ -147,8 +147,8 @@ def get_configs() -> list[config_lib.TrainConfig]:
             **common,
         ),
         config_lib.TrainConfig(
-            name="pi05_jokeru_base_inference",
-            model=pi0_config.Pi0Config(pi05=True, action_dim=32, action_horizon=12),
+            name="pi05_jokeru_base_inference_48",
+            model=pi0_config.Pi0Config(pi05=True, action_dim=32, action_horizon=48),
             data=_data_config(),
             batch_size=1,
             num_train_steps=1,

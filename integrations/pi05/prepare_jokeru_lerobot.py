@@ -6,7 +6,7 @@ The 29 FPS source videos are hard-linked. The 28/30 FPS files are stream-remuxed
 common 7.25 Hz control clock. Rows are sampled every four source frames, matching
 DreamDojo's Jokeru cadence.
 The output ``action`` at row t is the absolute command for row t+1; consequently
-OpenPI's 12-action horizon represents the twelve future DreamDojo transitions.
+OpenPI's configured action horizon represents future DreamDojo transitions.
 """
 
 from __future__ import annotations

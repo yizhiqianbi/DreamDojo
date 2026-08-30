@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 OPENPI_ROOT="${OPENPI_ROOT:-$ROOT/../openpi}"
-OUTPUT_DIR="${OUTPUT_DIR:-$ROOT/inference_results/pi05_parallel_worlds}"
+OUTPUT_DIR="${OUTPUT_DIR:-$ROOT/inference_results/pi05_parallel_worlds_48}"
 PI05_CHECKPOINT="${PI05_CHECKPOINT:-gs://openpi-assets/checkpoints/pi05_base}"
 CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}"
 export CUDA_VISIBLE_DEVICES
@@ -22,4 +22,5 @@ uv run --project "$OPENPI_ROOT" python "$ROOT/integrations/pi05/run_openpi.py" \
 
 source "$ROOT/.venv/bin/activate"
 python "$ROOT/integrations/pi05/generate_parallel_worlds.py" \
-  --manifest "$OUTPUT_DIR/manifest.json"
+  --manifest "$OUTPUT_DIR/manifest.json" \
+  --overwrite

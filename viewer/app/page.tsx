@@ -71,9 +71,9 @@ const universes: Universe[] = [
     color: '#a3ff52',
     video: '/videos/parallel/universe-00.mp4',
     actionRms: 0,
-    inferMs: 14142.7,
+    inferMs: 15336.5,
     pairwise: 'reference branch',
-    bars: [28, 45, 37, 58, 76, 50, 68, 40, 81, 62, 48, 70],
+    bars: [18, 90, 61, 38, 71, 64, 66, 41, 92, 61, 79, 57, 65, 31, 47, 51, 76, 31, 83, 64, 51, 29, 43, 56, 44, 59, 33, 29, 28, 42, 70, 91, 85, 56, 52, 53, 56, 24, 47, 19, 73, 40, 18, 48, 46, 18, 72, 78],
   },
   {
     id: 1,
@@ -81,10 +81,10 @@ const universes: Universe[] = [
     seed: 20260831,
     color: '#52d9ff',
     video: '/videos/parallel/universe-01.mp4',
-    actionRms: 0.0414,
-    inferMs: 61.9,
-    pairwise: '18.44 dB vs A',
-    bars: [38, 62, 44, 72, 51, 83, 56, 69, 42, 75, 64, 49],
+    actionRms: 0.0986,
+    inferMs: 74.2,
+    pairwise: '18.12 dB vs A',
+    bars: [18, 69, 87, 52, 40, 50, 40, 31, 34, 46, 40, 23, 36, 37, 54, 19, 87, 18, 36, 64, 34, 52, 55, 56, 33, 54, 41, 67, 45, 88, 26, 18, 18, 78, 34, 68, 73, 91, 85, 47, 66, 43, 92, 43, 83, 56, 75, 85],
   },
   {
     id: 2,
@@ -92,10 +92,10 @@ const universes: Universe[] = [
     seed: 20260832,
     color: '#ffbf5b',
     video: '/videos/parallel/universe-02.mp4',
-    actionRms: 0.0553,
-    inferMs: 78.4,
-    pairwise: '18.30 dB vs A',
-    bars: [55, 39, 70, 46, 84, 63, 42, 77, 58, 88, 51, 66],
+    actionRms: 0.1094,
+    inferMs: 81.5,
+    pairwise: '18.15 dB vs A',
+    bars: [18, 85, 92, 32, 47, 57, 56, 52, 46, 49, 55, 22, 34, 43, 89, 92, 66, 36, 21, 37, 29, 25, 27, 46, 49, 26, 30, 18, 34, 30, 22, 22, 31, 31, 42, 18, 18, 48, 70, 46, 45, 37, 37, 41, 42, 36, 52, 56],
   },
 ];
 
@@ -133,7 +133,7 @@ function Metric({ label, value, kind }: { label: string; value: number; kind: ke
 
 function ActionTrace({ universe }: { universe: Universe }) {
   return (
-    <div className="action-trace" aria-label={`${universe.name} 12-step action magnitude trace`}>
+    <div className="action-trace" aria-label={`${universe.name} 48-step action magnitude trace`}>
       {universe.bars.map((height, index) => (
         <span key={index} style={{ height: `${height}%`, backgroundColor: universe.color }} />
       ))}
@@ -158,7 +158,7 @@ function ParallelWorkspace() {
             </div>
             <h1 className="text-2xl font-semibold tracking-[-0.025em] sm:text-3xl">One observation. Three possible futures.</h1>
             <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-              A real Jokeru frame is replayed into π0.5 three times with distinct flow-matching noise seeds. Each 12-step action chunk conditions the same DreamDojo checkpoint.
+              A real Jokeru observation is replayed into π0.5 three times with distinct flow-matching noise seeds. Each 48-step plan is rolled through four chained DreamDojo windows.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -175,9 +175,9 @@ function ParallelWorkspace() {
           {[
             ['Observation', 'recorded RGB', Video],
             ['Policy', 'π0.5 · 2B', Cpu],
-            ['Action chunk', '12 × 30D', Activity],
-            ['Conditioning', '12 × 384D', Layers3],
-            ['World model', 'DreamDojo · 2B', BrainCircuit],
+            ['Action plan', '48 × 30D', Activity],
+            ['Conditioning', '48 × 384D', Layers3],
+            ['World model', '4 × 12 rollout', BrainCircuit],
           ].map(([label, value, Icon], index) => (
             <div key={label as string} className={cn('pipeline-step', index === 4 && 'col-span-2 lg:col-span-1')}>
               <span className="pipeline-index">{String(index + 1).padStart(2, '0')}</span>
@@ -242,7 +242,7 @@ function ParallelWorkspace() {
                     </div>
                     <div className="relative overflow-hidden bg-black">
                       <video key={`u-${universe.id}-${playbackKey}`} src={universe.video} autoPlay muted loop playsInline controls className="aspect-[4/3] h-full w-full object-cover" />
-                      <div className="video-label"><Play className="size-3" /> DreamDojo future · {universe.pairwise}</div>
+                      <div className="video-label"><Play className="size-3" /> 49-frame DreamDojo future · {universe.pairwise}</div>
                     </div>
                   </div>
                 </article>
@@ -256,8 +256,8 @@ function ParallelWorkspace() {
         <div className="panel p-5">
           <div className="flex items-start justify-between gap-4"><div><p className="eyebrow">Focused branch</p><h2 className="mt-1 text-base font-semibold">{selected.name} diagnostics</h2></div><Badge style={{ borderColor: selected.color, color: selected.color }} variant="outline">seed {selected.seed}</Badge></div>
           <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <div className="diagnostic"><span>VLA output</span><strong>12 × 30D</strong><small>absolute controls</small></div>
-            <div className="diagnostic"><span>ACWM input</span><strong>12 × 384D</strong><small>Jokeru slice 169:199</small></div>
+            <div className="diagnostic"><span>VLA output</span><strong>48 × 30D</strong><small>one-shot absolute controls</small></div>
+            <div className="diagnostic"><span>ACWM rollout</span><strong>4 × 12</strong><small>48 × 384D conditions</small></div>
             <div className="diagnostic"><span>Action RMS</span><strong>{selected.actionRms.toFixed(4)}</strong><small>from Universe A</small></div>
             <div className="diagnostic"><span>Video delta</span><strong>{selected.id === 0 ? '—' : selected.pairwise.split(' ')[0]}</strong><small>pixel PSNR vs A</small></div>
           </div>
@@ -276,7 +276,7 @@ function ParallelWorkspace() {
 
       <footer className="flex flex-col gap-2 px-1 pb-3 text-[10px] text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
         <span>Recorded observation → π0.5 flow matching → DreamDojo action-conditioned future</span>
-        <span className="font-mono">3 SEEDS · 12 ACTIONS · 13 FRAMES · 7 FPS</span>
+        <span className="font-mono">3 SEEDS · 48 ACTIONS · 49 FRAMES · 7.25 FPS</span>
       </footer>
     </div>
   );
@@ -347,7 +347,7 @@ export default function Home() {
         <div className="mx-auto flex min-h-16 max-w-[1760px] flex-wrap items-center justify-between gap-3 px-4 py-2 sm:px-7">
           <div className="flex min-w-0 items-center gap-3"><div className="grid size-9 shrink-0 place-items-center rounded-xl border border-primary/30 bg-primary/10 text-primary shadow-[0_0_30px_color-mix(in_oklch,var(--primary)_22%,transparent)]"><BrainCircuit className="size-5" /></div><div className="min-w-0"><div className="flex items-center gap-2"><span className="truncate text-sm font-semibold tracking-tight">DreamDojo</span><span className="text-border">/</span><span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">Parallel Lab</span></div><p className="truncate text-[11px] text-muted-foreground">π0.5 × action-conditioned world model</p></div></div>
           <div className="flex items-center gap-2 rounded-xl border border-border bg-secondary/25 p-1"><Button size="sm" variant={workspace === 'parallel' ? 'default' : 'ghost'} onClick={() => setWorkspace('parallel')} className={cn('h-8 rounded-lg', workspace === 'parallel' && 'bg-primary text-primary-foreground')}><GitBranch className="size-3.5" />Parallel worlds</Button><Button size="sm" variant={workspace === 'evaluation' ? 'default' : 'ghost'} onClick={() => setWorkspace('evaluation')} className={cn('h-8 rounded-lg', workspace === 'evaluation' && 'bg-primary text-primary-foreground')}><Database className="size-3.5" />Evaluation</Button></div>
-          <div className="hidden items-center gap-2 xl:flex"><Badge variant="outline" className="border-border/80 bg-card/50 font-mono text-muted-foreground"><Timer className="size-3" /> warm VLA 62–78ms</Badge><Badge className="border border-primary/25 bg-primary/10 text-primary"><span className="size-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]" />LoRA smoke passed</Badge></div>
+          <div className="hidden items-center gap-2 xl:flex"><Badge variant="outline" className="border-border/80 bg-card/50 font-mono text-muted-foreground"><Timer className="size-3" /> warm VLA 74–81ms</Badge><Badge className="border border-primary/25 bg-primary/10 text-primary"><span className="size-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]" />LoRA smoke passed</Badge></div>
         </div>
       </header>
       {workspace === 'parallel' ? <ParallelWorkspace /> : <EvaluationWorkspace />}

@@ -21,7 +21,7 @@ def _stats(values: np.ndarray) -> dict[str, list[float]]:
     }
 
 
-def compute(dataset_root: Path, output_path: Path, action_horizon: int = 12) -> None:
+def compute(dataset_root: Path, output_path: Path, action_horizon: int = 48) -> None:
     info = json.loads((dataset_root / "meta/info.json").read_text())
     episodes = [
         json.loads(line)
@@ -72,7 +72,7 @@ def main() -> None:
             / "outputs/pi05/assets/pi05_jokeru_lora/jokeru/pi05_world_model/norm_stats.json"
         ),
     )
-    parser.add_argument("--action-horizon", type=int, default=12)
+    parser.add_argument("--action-horizon", type=int, default=48)
     args = parser.parse_args()
     compute(args.dataset_root.resolve(), args.output_path.resolve(), args.action_horizon)
 
