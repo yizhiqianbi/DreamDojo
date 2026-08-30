@@ -24,7 +24,10 @@ import torch
 
 from cosmos_predict2._src.imaginaire.attention.utils import safe_log as log
 
-NATTEN_MIN_RELEASE_VERSION = [0, 21, 5]
+NATTEN_MIN_RELEASE_VERSION = [0, 21, 0]
+# The Torch 2.7/CUDA 12.8 environment locked by this repository ships 0.21.0,
+# whose fused 3-D causal FNA and backward APIs cover the DreamDojo warmup path.
+# Newer NATTEN wheels (0.21.5+) require Torch 2.8 or later.
 # 0.21.5.dev1 patches some varlen issues
 # 0.21.5.dev2 adds torch compile support
 # 0.21.5.dev3 fixes a few compat issues for older torch versions

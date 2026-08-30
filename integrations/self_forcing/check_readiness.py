@@ -22,6 +22,14 @@ def _cache_ids(cache_root: Path) -> set[str]:
     return set.intersection(*required) if required else set()
 
 
+def _discover_checkpoint(requested: Path) -> Path:
+    if _complete_dcp(requested):
+        return requested
+    search_root = requested.parents[1]
+    candidates = sorted(search_root.glob("**/checkpoints/iter_*/model/.metadata"))
+    return candidates[-1].parent.parent if candidates else requested
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -33,6 +41,9 @@ def main() -> None:
     parser.add_argument("--warmup", type=Path, default=REPO_ROOT / "outputs/self_forcing/jokeru/warmup/checkpoints/iter_000020000")
     parser.add_argument("--student", type=Path, default=REPO_ROOT / "outputs/self_forcing/jokeru/student/checkpoints/iter_000003000")
     args = parser.parse_args()
+
+    args.warmup = _discover_checkpoint(args.warmup)
+    args.student = _discover_checkpoint(args.student)
 
     cache_ids = _cache_ids(args.cache)
     report = {

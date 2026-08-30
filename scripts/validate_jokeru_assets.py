@@ -22,6 +22,8 @@ VIDEO_KEYS = {
 WAN21_VAE_SIZE = 507_609_880
 WAN21_VAE_SHA256 = "38071ab59bd94681c686fa51d75a1968f64e470262043be31f7a094e442fd981"
 REASON1_REVISION = "3210bec0495fdc7a8d3dbb8d58da5711eab4b423"
+CR1_EMBEDDING_SIZE = 102_762_305
+CR1_EMBEDDING_SHA256 = "d1e5d8c335dff55f266d9ca5fc2579874e7115e84a50e48f5494f16ea42fe3a3"
 
 
 def validate_checkpoint() -> int:
@@ -47,6 +49,19 @@ def validate_vae() -> None:
     if digest.hexdigest() != WAN21_VAE_SHA256:
         raise RuntimeError(f"Wan2.1 VAE checksum mismatch: {path}")
     print(f"wan2.1_vae\t{WAN21_VAE_SIZE:,} bytes")
+
+
+def validate_cr1_embedding() -> None:
+    path = PROJECT_ROOT / "datasets" / "cr1_empty_string_text_embeddings.pt"
+    if not path.is_file() or path.stat().st_size != CR1_EMBEDDING_SIZE:
+        raise RuntimeError(f"CR1 empty-prompt embedding is missing or incomplete: {path}")
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(8 * 1024 * 1024), b""):
+            digest.update(chunk)
+    if digest.hexdigest() != CR1_EMBEDDING_SHA256:
+        raise RuntimeError(f"CR1 empty-prompt embedding checksum mismatch: {path}")
+    print(f"cr1_embedding\t{CR1_EMBEDDING_SIZE:,} bytes")
 
 
 def validate_condition_encoder() -> None:
@@ -114,6 +129,7 @@ def main() -> None:
 
     validate_checkpoint()
     validate_vae()
+    validate_cr1_embedding()
     validate_condition_encoder()
     totals = [validate_dataset(PROJECT_ROOT / relative_path) for relative_path in configured_paths]
     print(

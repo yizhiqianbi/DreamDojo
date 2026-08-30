@@ -45,6 +45,16 @@ def download_checkpoint(max_workers: int) -> None:
         local_dir=vae_destination,
     )
 
+    embedding_destination = PROJECT_ROOT / "datasets"
+    embedding_destination.mkdir(parents=True, exist_ok=True)
+    print(f"Downloading the public CR1 empty-prompt embedding to {embedding_destination}")
+    hf_hub_download(
+        repo_id="Cocoyawn32/cosmos-predict2p5-cr1-empty-embedding",
+        repo_type="dataset",
+        filename="cr1_empty_string_text_embeddings.pt",
+        local_dir=embedding_destination,
+    )
+
     reason_cache = PROJECT_ROOT / ".cache" / "huggingface" / "hub"
     print(f"Caching the frozen Cosmos-Reason1-7B condition encoder in {reason_cache}")
     snapshot_download(

@@ -21,6 +21,7 @@ NATTEN Backend: intermediate APIs
 Only safe to import when NATTEN_SUPPORTED is True.
 """
 
+import natten
 from natten.context import set_memory_usage_preference, use_kv_parallelism_in_fused_na
 from natten.functional import attention as _natten_attention
 from natten.functional import neighborhood_attention_generic as _natten_multi_dim_attention
@@ -40,6 +41,8 @@ from cosmos_predict2._src.imaginaire.attention.natten.checks import (
 
 set_memory_usage_preference("unrestricted")
 use_kv_parallelism_in_fused_na(True)
+
+_NATTEN_VERSION = tuple(int(part) for part in natten.__version__.split("+", 1)[0].split(".")[:3])
 
 
 def natten_attention(
@@ -142,6 +145,27 @@ def natten_attention(
     if "backward_use_pt_reduction" in backend_kwargs:
         backward_use_pt_reduction = backend_kwargs["backward_use_pt_reduction"]
         del backend_kwargs["backward_use_pt_reduction"]
+
+    # NATTEN 0.21.0 is the CUDA-enabled build pinned for this repository's
+    # Torch 2.7 environment. The causal/varlen arguments were added to the
+    # standard attention API in 0.21.5; fixed-length non-causal attention uses
+    # the same kernel in both versions.
+    if _NATTEN_VERSION < (0, 21, 5):
+        if is_causal or is_varlen:
+            raise RuntimeError(
+                "NATTEN 0.21.0 only supports fixed-length non-causal standard attention; "
+                "the DreamDojo causal self-attention path uses neighborhood_attention_generic."
+            )
+        return _natten_attention(
+            query=query,
+            key=key,
+            value=value,
+            scale=scale,
+            return_lse=return_lse,
+            backend=natten_backend,
+            backward_use_pt_reduction=backward_use_pt_reduction,
+            **backend_kwargs,
+        )
 
     return _natten_attention(
         query=query,
